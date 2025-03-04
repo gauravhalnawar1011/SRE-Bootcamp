@@ -1,19 +1,30 @@
+import sys
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from .config import Config
 
-# Initialize Flask app
-app = Flask(__name__)
-app.config.from_object(Config)
+# Ensure the root directory is in Python's path
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-# Initialize extensions
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+from config import Config  # ✅ Ensure correct config import
 
-# Use in-memory storage for rate limiter (removes Redis dependency)
-limiter = Limiter(get_remote_address, app=app, default_limits=["100 per minute"], storage_uri="memory://")
+# Initialize database
+db = SQLAlchemy()
+migrate = Migrate()  # ✅ Added Flask-Migrate for handling migrations
 
-from . import routes  # Import routes
+def create_app():
+    app = Flask(__name__)
+    
+    # Load configuration
+    app.config.from_object(Config)
+
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)  # ✅ Initialize Flask-Migrate
+
+    # Import and register Blueprints after initializing db
+    from app.routes import student_bp  # ✅ Import Blueprint
+    app.register_blueprint(student_bp)  # ✅ Register Blueprint
+
+    return app

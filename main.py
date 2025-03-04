@@ -5,7 +5,7 @@ import os
 import logging
 
 # Load environment variables
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///students.db")
+DATABASE_URL = os.getenv(DATABASE_URL = "postgresql://admin:admin@localhost:5433/students_db")
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -68,3 +68,15 @@ def healthcheck():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+# from flask import Flask
+
+# app = Flask(__name__)
+
+# @app.route('/')
+# def home():
+#     return "Hello, Flask is working!"
+
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000, debug=True)
