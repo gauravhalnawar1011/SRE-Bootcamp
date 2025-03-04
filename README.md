@@ -111,11 +111,3 @@ psql -U admin -d students_db -h localhost -p 5433
 
 ---
 
-## 🤝 Contributing  
-Feel free to create issues, fork the repo, and submit PRs for improvements!  
-
----
-
-```
-
----
