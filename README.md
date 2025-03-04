@@ -1,6 +1,4 @@
----
 
-### README.md  
 
 ```md
 # Student Management API (Flask + PostgreSQL)
