@@ -14,19 +14,19 @@ This project is a containerized REST API built using Flask and PostgreSQL. It fo
 ## 📂 Project Structure
 ```
 SRE-Bootcamp/
-│── app/                # Application package
-│   ├── __init__.py     # App & database initialization
-│   ├── models.py       # Database models (Student table)
-│   ├── routes.py       # API endpoints (CRUD operations)
-│   ├── create_tables.py # Script to create database tables
-│   ├── config.py       # Database & environment configurations
-│── migrations/         # Database migration files (auto-generated)
-│── setup.sh            # Automates system dependencies, PostgreSQL, and virtualenv setup
-│── requirements.txt    # Python package dependencies
-│── run.py              # Entry point to start the Flask application
-│── Makefile            # Contains commands to build & run Docker containers
-│── Dockerfile          # Defines how to containerize the API
-│── README.md           # Project documentation
+│—— app/                # Application package
+│   ├—— __init__.py     # App & database initialization
+│   ├—— models.py       # Database models (Student table)
+│   ├—— routes.py       # API endpoints (CRUD operations)
+│   ├—— create_tables.py # Script to create database tables
+│   ├—— config.py       # Database & environment configurations
+│—— migrations/         # Database migration files (auto-generated)
+│—— setup.sh            # Automates system dependencies, PostgreSQL, and virtualenv setup
+│—— requirements.txt    # Python package dependencies
+│—— run.py              # Entry point to start the Flask application
+│—— Makefile            # Contains commands to build & run Docker containers
+│—— Dockerfile          # Defines how to containerize the API
+│—— README.md           # Project documentation
 ```
 
 ---
@@ -40,27 +40,28 @@ cd SRE-Bootcamp
 git pull origin Containerise_REST_API
 ```
 
-### 2️⃣ Run the Setup Script
-The `setup.sh` script automates the following:
-✅ Updates system packages
-✅ Installs dependencies (Python, pip, venv, Docker)
-✅ Sets up PostgreSQL in a Docker container
-✅ Configures a custom Docker network (`my_network`)
-✅ Creates & activates a Python virtual environment
-✅ Installs required Python packages from `requirements.txt`
-✅ Runs Flask database migrations
+### 2️⃣ Run the Setup and Containers Together
 
-#### **Run the script:**
+
+#### **Run the command:**
 ```bash
-chmod +x setup.sh
-./setup.sh
+make run
 ```
+![alt text](<Screenshot from 2025-03-08 18-36-05.png>)
+![alt text](<Screenshot from 2025-03-08 18-36-41.png>)
+This command will:
+✅ Run the `setup.sh` script to handle environment setup.
+✅ Build the Docker image.
+✅ Start the PostgreSQL container in the correct network.
+✅ Wait for PostgreSQL to be healthy before proceeding.
+✅ Start the API container with the correct environment variables.
 
 ### 3️⃣ Check if PostgreSQL is Running
 Verify the PostgreSQL container status:
 ```bash
 sudo docker ps -a
 ```
+![alt text](<Screenshot from 2025-03-08 18-34-23.png>)
 If any old PostgreSQL containers are running, clean them up:
 ```bash
 sudo docker system prune -f
@@ -72,22 +73,18 @@ sudo docker system prune -f
 
 ### **Building the Docker Image**
 ```bash
-docker build -t my_rest_api:1.0.0 .
+make build
 ```
-> **Why versioning instead of `latest`?**
-- Using semantic versioning (`1.0.0`, `1.0.1`) ensures better traceability.
-- Avoids unexpected behavior from `latest` images.
 
 ### **Running the API Container**
 ```bash
-docker run -d --name my_api_container --network=my_network -p 5000:5000 \
-  -e DATABASE_URL="postgresql://admin:admin@postgres-container:5432/students_db" my_rest_api:1.0.0
+make run
 ```
 The API is now running at `http://localhost:5000` 🚀
 
 ---
 
-## 📜 Makefile Automation
+## 💜 Makefile Automation
 The **Makefile** automates repetitive Docker tasks and ensures consistency.
 
 ### **Key Makefile Commands**
@@ -96,12 +93,14 @@ build:
 	docker build -t $(IMAGE_NAME) .
 
 run: build
+	@echo "⏳ Waiting for PostgreSQL to be ready..."
+	@until docker exec $(POSTGRES_CONTAINER) pg_isready -U admin; do sleep 3; done
 	docker run -d --name $(CONTAINER_NAME) --network=$(NETWORK_NAME) -p $(PORT):$(PORT) \
 		-e DATABASE_URL="postgresql://admin:admin@$(POSTGRES_CONTAINER):5432/students_db" $(IMAGE_NAME)
 
 stop:
-	docker stop $(CONTAINER_NAME) || true
-	docker rm $(CONTAINER_NAME) || true
+	docker stop $(CONTAINER_NAME) $(POSTGRES_CONTAINER) || true
+	docker rm $(CONTAINER_NAME) $(POSTGRES_CONTAINER) || true
 
 restart: stop run
 
@@ -116,9 +115,9 @@ clean:
 ### **Usage Examples**
 ```bash
 make build    # Build the Docker image
-make run      # Run the API container
-make stop     # Stop and remove the container
-make restart  # Restart the container
+make run      # Run the API container and PostgreSQL together
+make stop     # Stop and remove the containers
+make restart  # Restart the containers
 make logs     # View live logs
 make clean    # Remove Docker images and prune system
 ```
@@ -138,49 +137,17 @@ make clean    # Remove Docker images and prune system
     "age": 25,
     "grade": "A"
 }
-
 ```
-/home/gauravhalnawar/Pictures/Screenshots/Screenshot from 2025-03-06 13-42-59.png
+![alt text](<Screenshot from 2025-03-08 18-33-24.png>)
 5. Click **Send**. You should receive a `201 Created` status.
 
 ### **Step 2:** Create a GET Request
 1. Create a **GET** request to `http://localhost:5000/api/v1/students`
 2. Click **Send**. You should receive a list of student records.
-![alt text](<Screenshot from 2025-03-06 13-43-12-1.png>)
-
-### **Step 3:** Error Handling in Postman
-- **400 Bad Request** → Check your JSON payload format.
-- **500 Internal Server Error** → Ensure the PostgreSQL container is running.
 
 ---
-
-## 🎯 Key Learning Outcomes
-✅ **Dockerizing a Flask API** using a well-structured Dockerfile
-✅ **Multi-stage builds** to optimize image size
-✅ **Custom networks** to enable container-to-container communication
-✅ **Injecting environment variables** at runtime
-✅ **Using Makefile for automation**
-✅ **Postman API testing with structured steps**
-
----
-
-## 📸 Screenshots (Proof of Execution)
-✅ PostgreSQL container running
-![alt text](<Screenshot from 2025-03-06 13-19-36.png>)
-![alt text](<Screenshot from 2025-03-06 13-42-07.png>)
-✅ Successful API requests in Postman
-![alt text](<Screenshot from 2025-03-06 13-42-59-1.png>)
-![alt text](<Screenshot from 2025-03-06 13-43-12-2.png>)
-![alt text](<Screenshot from 2025-03-06 13-44-50.png>)
-![alt text](<Screenshot from 2025-03-06 12-57-30.png>)
-![alt text](<Screenshot from 2025-03-06 13-14-06.png>)
-![alt text](<Screenshot from 2025-03-06 13-19-06.png>)
-✅ make build and setup.sh 
-![alt text](<Screenshot from 2025-03-06 13-38-23.png>)
-![alt text](<Screenshot from 2025-03-06 13-38-40.png>)
----
-
-## 🔍 Monitoring & Reliability
+![alt text](<Screenshot from 2025-03-08 18-33-54.png>)
+## 📈 Monitoring & Reliability
 - Regularly inspect running containers using:
 ```bash
 sudo docker ps -a
@@ -193,8 +160,4 @@ docker logs postgres-container
 ```bash
 flask db upgrade
 ```
-
----
-
-
 

@@ -1,5 +1,4 @@
 # Multi-stage Dockerfile for Flask REST API
-
 # 1st Stage: Builder to install dependencies
 FROM python:3.11-slim AS builder
 
@@ -7,6 +6,7 @@ WORKDIR /app
 
 # Install system dependencies required for psycopg2
 RUN apt-get update && apt-get install -y libpq-dev gcc python3-dev
+
 
 # Install dependencies
 COPY requirements.txt .
