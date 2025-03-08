@@ -3,3 +3,4 @@ flask-sqlalchemy
 flask-migrate
 flask-limiter
 marshmallow
+psycopg2-binary

@@ -38,19 +38,27 @@ pip install -r requirements.txt
 echo "🐘 Setting up PostgreSQL container..."
 docker pull postgres:latest
 
-# Stop and remove any existing PostgreSQL container
-docker stop postgres-container 2>/dev/null
-docker rm postgres-container 2>/dev/null
+# 🟢 Stop and remove any existing PostgreSQL container
+sudo docker stop postgres-container 2>/dev/null || true
+sudo docker rm postgres-container 2>/dev/null || true
 
-# Run PostgreSQL container
-docker run --name postgres-container -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=students_db -p 5433:5432 -d postgres
+# 🟢 Create a custom Docker network (avoid errors if it already exists)
+sudo docker network create my_network || true
+
+# 🟢 Run PostgreSQL container (Fixed the command)
+sudo docker run -d --name postgres-container --network=my_network \
+    -e POSTGRES_USER=admin \
+    -e POSTGRES_PASSWORD=admin \
+    -e POSTGRES_DB=students_db \
+    -p 5433:5432 postgres
 
 # 🟢 Wait for PostgreSQL to initialize
 echo "⏳ Waiting for PostgreSQL to start..."
 sleep 10
 
-# 🟢 Export database URL for Flask
+# 🟢 Export database URL for Flask and persist it
 export DATABASE_URL="postgresql://admin:admin@localhost:5433/students_db"
+echo 'export DATABASE_URL="postgresql://admin:admin@localhost:5433/students_db"' >> ~/.bashrc
 
 # 🟢 Initialize and apply Flask migrations
 echo "📌 Running database migrations..."

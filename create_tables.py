@@ -2,7 +2,9 @@ import os
 import psycopg2
 
 # Get database URL from environment variable
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://admin:admin@localhost:5433/students_db")
+# DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://admin:admin@localhost:5432/students_db")
+DATABASE_URL = "postgresql://admin:admin@localhost:5432/students_db"
+
 
 # Define table schema
 TABLE_SCHEMA = """
