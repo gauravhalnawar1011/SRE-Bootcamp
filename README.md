@@ -138,8 +138,9 @@ make clean    # Remove Docker images and prune system
     "age": 25,
     "grade": "A"
 }
-/home/gauravhalnawar/Pictures/Screenshots/Screenshot from 2025-03-06 13-42-59.png
+
 ```
+/home/gauravhalnawar/Pictures/Screenshots/Screenshot from 2025-03-06 13-42-59.png
 5. Click **Send**. You should receive a `201 Created` status.
 
 ### **Step 2:** Create a GET Request
@@ -165,9 +166,18 @@ make clean    # Remove Docker images and prune system
 
 ## 📸 Screenshots (Proof of Execution)
 ✅ PostgreSQL container running
+![alt text](<Screenshot from 2025-03-06 13-19-36.png>)
+![alt text](<Screenshot from 2025-03-06 13-42-07.png>)
 ✅ Successful API requests in Postman
-✅ Correct responses with status codes
-
+![alt text](<Screenshot from 2025-03-06 13-42-59-1.png>)
+![alt text](<Screenshot from 2025-03-06 13-43-12-2.png>)
+![alt text](<Screenshot from 2025-03-06 13-44-50.png>)
+![alt text](<Screenshot from 2025-03-06 12-57-30.png>)
+![alt text](<Screenshot from 2025-03-06 13-14-06.png>)
+![alt text](<Screenshot from 2025-03-06 13-19-06.png>)
+✅ make build and setup.sh 
+![alt text](<Screenshot from 2025-03-06 13-38-23.png>)
+![alt text](<Screenshot from 2025-03-06 13-38-40.png>)
 ---
 
 ## 🔍 Monitoring & Reliability
