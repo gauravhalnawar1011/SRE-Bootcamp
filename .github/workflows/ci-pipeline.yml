@@ -17,10 +17,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Install dependencies (Using your Makefile command)
+      # Step 2: Install dependencies
       - name: Install Dependencies
-        run: make install_tools
-
+        run: |
+          pip install -r requirements.txt  # Ensures pytest is installed
+          make install_tools
 
       # Step 3: Build the API
       - name: Build API
