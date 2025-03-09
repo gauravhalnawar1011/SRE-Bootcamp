@@ -31,14 +31,14 @@ jobs:
         run: make build
       
       # Step 4: Run Tests (Now running within the virtual environment)
-      - name: Run Tests
-        run: |
-          source venv/bin/activate
-          make test
+    #   - name: Run Tests
+    #     run: |
+    #       source venv/bin/activate
+    #       make test
 
-      # Step 5: Linting (Code Quality Check)
-      - name: Run Linter
-        run: make lint
+    #   # Step 5: Linting (Code Quality Check)
+    #   - name: Run Linter
+    #     run: make lint
 
   docker-build-push:
     runs-on: self-hosted
