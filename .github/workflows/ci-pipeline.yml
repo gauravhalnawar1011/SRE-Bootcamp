@@ -21,10 +21,11 @@ jobs:
       - name: Install Dependencies
         run: make install_tools
 
+
       # Step 3: Build the API
       - name: Build API
         run: make build
-
+      
       # Step 4: Run Tests
       - name: Run Tests
         run: make test
@@ -48,5 +49,5 @@ jobs:
       # Step 7: Build and Push Docker Image
       - name: Build and Push Docker Image
         run: |
-          docker build -t your-dockerhub-username/sre-bootcamp-api:latest .
-          docker push your-dockerhub-username/sre-bootcamp-api:latest
+          docker build -t gauravhalnawar0506/api-dev-env-setup-sre-bootcamp:latest .
+          docker push gauravhalnawar0506/api-dev-env-setup-sre-bootcamp:latest
