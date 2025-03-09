@@ -23,6 +23,11 @@ migrate:
 build:
 	@docker compose build api-container
 
+.PHONY: test
+test:
+	@echo "🚨 Running tests..."
+	pytest tests/  # Change 'tests/' to your actual test folder path
+
 # Start the full environment (installs tools + starts DB + runs migrations + builds API)
 run:
 	@$(MAKE) install_tools
