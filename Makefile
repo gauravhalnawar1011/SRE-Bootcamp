@@ -32,7 +32,11 @@ build:
 # 	@pip install -r requirements.txt
 # 	@echo "🚨 Running tests..."
 # 	pytest tests/ --disable-warnings
-
+# Linting for code quality check
+lint:
+	@echo "🚨 Running linter..."
+	source venv/bin/activate && flake8 app/ 
+	
 # Start the full environment (installs tools + starts DB + runs migrations + builds API)
 run: install_tools start_db migrate build
 	@docker compose up -d api-container
