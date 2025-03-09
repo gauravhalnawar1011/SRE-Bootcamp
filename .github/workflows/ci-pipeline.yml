@@ -1,0 +1,52 @@
+name: CI Pipeline
+
+on:
+  push:
+    paths:
+      - 'app/**'       # Trigger only when code changes in the 'app' folder
+      - 'Makefile'      # Trigger if Makefile changes
+      - 'Dockerfile'    # Trigger if Dockerfile changes
+  workflow_dispatch:    # Allows manual triggering of the pipeline
+
+jobs:
+  build-and-test:
+    runs-on: self-hosted  # Uses your self-hosted runner
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Install dependencies (Using your Makefile command)
+      - name: Install Dependencies
+        run: make install_tools
+
+      # Step 3: Build the API
+      - name: Build API
+        run: make build
+
+      # Step 4: Run Tests
+      - name: Run Tests
+        run: make test
+
+      # Step 5: Linting (Code Quality Check)
+      - name: Run Linter
+        run: make lint
+
+  docker-build-push:
+    runs-on: self-hosted
+    needs: build-and-test # Ensures build/test steps are successful before proceeding
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 6: Login to DockerHub (or GitHub Packages)
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # Step 7: Build and Push Docker Image
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t your-dockerhub-username/sre-bootcamp-api:latest .
+          docker push your-dockerhub-username/sre-bootcamp-api:latest
