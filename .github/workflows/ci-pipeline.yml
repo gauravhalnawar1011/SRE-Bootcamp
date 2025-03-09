@@ -17,19 +17,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Install dependencies
+      # Step 2: Install dependencies (with virtual environment for pytest)
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt  # Ensures pytest is installed
+          python3 -m venv venv         # Create a virtual environment
+          source venv/bin/activate     # Activate the virtual environment
+          pip install -r requirements.txt
+          echo "VENV PATH=$(pwd)/venv/bin" >> $GITHUB_ENV
           make install_tools
 
       # Step 3: Build the API
       - name: Build API
         run: make build
       
-      # Step 4: Run Tests
+      # Step 4: Run Tests (Now running within the virtual environment)
       - name: Run Tests
-        run: make test
+        run: |
+          source venv/bin/activate
+          make test
 
       # Step 5: Linting (Code Quality Check)
       - name: Run Linter
