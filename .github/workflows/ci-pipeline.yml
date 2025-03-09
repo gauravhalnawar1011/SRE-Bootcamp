@@ -9,7 +9,7 @@ on:
   workflow_dispatch:    # Allows manual triggering of the pipeline
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: self-hosted  # Uses your self-hosted runner
 
     steps:
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Install dependencies (with virtual environment for pytest)
+      # Step 2: Install dependencies (with virtual environment)
       - name: Install Dependencies
         run: |
           python3 -m venv venv         # Create a virtual environment
@@ -29,30 +29,20 @@ jobs:
       # Step 3: Build the API
       - name: Build API
         run: make build
-      
-      # Step 4: Run Tests (Now running within the virtual environment)
-    #   - name: Run Tests
-    #     run: |
-    #       source venv/bin/activate
-    #       make test
-
-    #   # Step 5: Linting (Code Quality Check)
-    #   - name: Run Linter
-    #     run: make lint
 
   docker-build-push:
     runs-on: self-hosted
-    needs: build-and-test # Ensures build/test steps are successful before proceeding
+    needs: build-and-deploy  # Ensures build steps are successful before proceeding
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 6: Login to DockerHub (or GitHub Packages)
+      # Step 4: Login to DockerHub
       - name: Docker Login
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # Step 7: Build and Push Docker Image
+      # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
         run: |
           docker build -t gauravhalnawar0506/api-dev-env-setup-sre-bootcamp:latest .
