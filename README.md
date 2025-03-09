@@ -87,7 +87,9 @@ curl -X GET http://localhost:5000/students
 ## 📷 Screenshots
 /home/gauravhalnawar/Pictures/Screenshots/Screenshot from 2025-03-09 11-34-03.png
 ![alt text](<Screenshot from 2025-03-09 11-36-30.png>)
-
+![alt text](<Screenshot from 2025-03-09 11-45-18.png>)
+![alt text](<Screenshot from 2025-03-09 11-47-18.png>)
+![alt text](<Screenshot from 2025-03-09 11-47-53.png>)
 
 
 ## 📚 Learning Outcomes
@@ -101,7 +103,13 @@ Through this project, we learned:
 
 ---
 
-If you face any issues or have questions, feel free to reach out. 🚀
-```
+If you have any questions or encounter issues, don't hesitate to get in touch. 🚀  
+
+## 📲 Connect with Me  
+**🔗 LinkedIn:** [Gaurav Halnawar](https://www.linkedin.com/in/gaurav-halnawar-2a272917a/)  
+
+**📧 Email:** gauravhalnawar0506@gmail.com  
+
+**📞 Phone:** +91 8308074216  
 
 ---
