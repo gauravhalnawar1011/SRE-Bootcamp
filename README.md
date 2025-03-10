@@ -1,115 +1,128 @@
-Here's the improved `README.md` with the following updates:  
+### 🚀 **REST API with Flask & PostgreSQL Setup Guide**
 
-✅ One-click deployment using `make run`.  
-✅ Learning outcomes added to highlight key takeaways from the project.  
+## 📌 **Overview**
+This open-source project offers a containerized REST API built using Flask and PostgreSQL, now enhanced with CI/CD via GitHub Actions for seamless deployment.
 
-```markdown
-# 📘 SRE Bootcamp Project
-
-This project is a REST API setup with PostgreSQL using Docker Compose. It allows users to manage student records with CRUD operations.
-
----
-
-## 🛠️ Setup Instructions
-
-### Prerequisites
-Ensure you have the following installed:
-- **Docker**
-- **Docker Compose**
-- **Python 3.11+**
-- **Postman** (Optional for testing API endpoints)
+Key Features:
+✅ **Pre-built Docker Image** — Simply pull and run the API without complex setup  
+✅ **Database Automation** — PostgreSQL container auto-creates the required `students` table  
+✅ **Flexible Workflow** — Developers can customize the code and build their own Docker image  
 
 ---
 
-## 🚀 One-Click Deployment
+## 🛠️ **Getting Started**
 
-### 1️⃣ Clone the Repository
+### 1️⃣ Prerequisites
+Ensure you have the following tools installed:
+- [Docker](https://docs.docker.com/get-docker/)  
+- [Docker Compose](https://docs.docker.com/compose/install/)  
+- [GNU Make](https://www.gnu.org/software/make/) (Optional for local development automation)  
+
+---
+
+### 2️⃣ **Set Up Self-Hosted GitHub Runner**
+To integrate CI/CD with your GitHub repository, follow these steps:
+
+1. **Go to Your GitHub Repository**
+   - Navigate to **Settings → Actions → Runners**.
+2. **Create a New Runner**
+   - Click **"New self-hosted runner"** and follow the on-screen instructions.
+3. **Install the Runner Locally**
+   - Run the provided script on your local system to install the runner.
+4. **Start the Runner**
+   ```bash
+   ./run.sh
+   ```
+
+---
+
+### 3️⃣ **Storing Docker Credentials in GitHub Secrets**
+For CI/CD to work securely:
+
+1. Go to **Settings → Secrets and variables → Actions**.
+2. Add the following secrets:
+   - `DOCKERHUB_USERNAME`: Your Docker Hub username  
+   - `DOCKERHUB_PASSWORD`: Your Docker Hub password or access token  
+
+---
+
+### 4️⃣ **Running the Pre-Built Docker Image**
+For users who just want to run the API without modifying code:
+
+1. **Pull the Latest Docker Image**  
 ```bash
-git clone --branch feature/setup-one-click-dev-env --single-branch https://github.com/gauravhalnawar1011/Portfolio-GH.git
+docker pull gauravhalnawar0506/api-dev-env-setup-sre-bootcamp:latest
+```
+
+
+2. **Run the API in Detached Mode**  
+```bash
+docker compose up -d
+```
+![alt text](<Screenshot from 2025-03-10 19-48-51.png>)
+
+3. **Verify the API is Running**  
+Check running containers with:  
+```bash
+docker ps
+```
+
+4. **Check API Logs (Optional)**  
+To view API logs in real-time:  
+```bash
+docker compose logs -f
+```
+![alt text](<Screenshot from 2025-03-10 19-51-20.png>)
+---
+
+### 5️⃣ **Making Code Changes & Building a Custom Image**
+If you want to modify the code or contribute to this open-source project:
+
+1. **Clone the Repository**  
+```bash
+git clone --branch feature/setup-ci-pipeline --single-branch https://github.com/gauravhalnawar1011/Portfolio-GH.git
 cd SRE-Bootcamp
-git pull origin feature/setup-one-click-dev-env
+git pull origin feature/setup-ci-pipeline
 ```
 
-### 2️⃣ One-Click Deployment Command
-Run this single command to install dependencies, start the database, run migrations, and launch the API:
+2. **Make Code Changes**  
+Modify files in the `/app` folder as required.
+
+3. **Build Your Custom Docker Image**  
 ```bash
-make run
+docker build -t your-username/custom-api:latest .
 ```
-✅ **Output:** API is running at [http://localhost:5000](http://localhost:5000)
 
----
-
-## 📋 API Usage Instructions
-
-### 1️⃣ Hitting the POST API Endpoint
-To add a new student record, use the following command or Postman:
-
-**Curl Command:**
+4. **Run Your Custom API**  
 ```bash
-curl -X POST http://localhost:5000/students \
--H "Content-Type: application/json" \
--d '{
-    "name": "SRE Bootcamp Student",
-    "age": 25,
-    "grade": "A"
-}'
+docker run -d -p 5000:5000 your-username/custom-api:latest
 ```
-✅ **Expected Response:**
-```json
-{
-    "id": 1,
-    "name": "SRE Bootcamp Student",
-    "age": 25,
-    "grade": "A"
-}
-```
-![alt text](<Screenshot from 2025-03-09 11-38-14.png>)
-
-### 2️⃣ Viewing the List of Students (GET Request)
-```bash
-curl -X GET http://localhost:5000/students
-```
-
-✅ **Expected Response:**
-```json
-[
-    {
-        "id": 1,
-        "name": "SRE Bootcamp Student",
-        "age": 25,
-        "grade": "A"
-    }
-]
-```
-![alt text](<Screenshot from 2025-03-09 11-39-23.png>)
----
-
-## 📷 Screenshots
-/home/gauravhalnawar/Pictures/Screenshots/Screenshot from 2025-03-09 11-34-03.png
-![alt text](<Screenshot from 2025-03-09 11-36-30.png>)
-![alt text](<Screenshot from 2025-03-09 11-45-18.png>)
-![alt text](<Screenshot from 2025-03-09 11-47-18.png>)
-![alt text](<Screenshot from 2025-03-09 11-47-53.png>)
-
-
-## 📚 Learning Outcomes
-Through this project, we learned:
-
-✅ How to set up a **PostgreSQL** database using **Docker Compose**.  
-✅ Writing a **Makefile** to automate installation, migration, and deployment steps.  
-✅ Creating a REST API with Python and performing **CRUD** operations.  
-✅ Managing dependencies and ensuring seamless environment setup using a **one-click deployment**.  
-✅ Debugging common Docker issues like file path errors, container conflicts, and migration issues.  
 
 ---
 
-If you have any questions or encounter issues, don't hesitate to get in touch. 🚀  
+### 6️⃣ **CI/CD Workflow Explanation**
+Our GitHub Actions workflow ensures that:
 
-## 📲 Connect with Me  
-**🔗 LinkedIn:** [Gaurav Halnawar](https://www.linkedin.com/in/gaurav-halnawar-2a272917a/)  
-
-**📧 Email:** gauravhalnawar0506@gmail.com  
-
-**📞 Phone:** +91 8308074216  
+✅ Any code change triggers the pipeline  
+✅ The updated Docker image is automatically built and pushed to Docker Hub  
+✅ Developers can pull the latest image to access updated features instantly  
 
 ---
+
+### 7️⃣ **Contributing to the Project**
+We welcome contributions! To contribute:
+
+- Fork the repository  
+- Create a new branch: `git checkout -b feature/new-feature`  
+- Commit your changes: `git commit -m "Add new feature"`  
+- Push to your branch: `git push origin feature/new-feature`  
+- Open a pull request for review  
+
+---
+
+### 📞 **Need Help?**
+If you face issues while setting up the environment or running the API, feel free to raise an issue on the [GitHub repository](https://github.com/your-repository-name/issues).
+
+---
+
+🚀 **You're all set! Enjoy building with this Flask API.**
